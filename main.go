@@ -15,6 +15,7 @@ import (
 const PathStyle = "250+h:238"
 const GitStyle = "250:22"
 const KubernetesStyle = "250:21"
+const AWSStyle = "250:130"
 const TerraformStyle = "250:93"
 const ExitCodeStyle = "250:124"
 
@@ -34,6 +35,7 @@ func main() {
 	path(os.Stdout, pwd)
 	git(os.Stdout, pwd)
 	kubernetes(os.Stdout)
+	aws(os.Stdout)
 	terraform(os.Stdout, pwd)
 
 	fmt.Fprintln(os.Stdout)
@@ -111,6 +113,12 @@ func kubernetes(w io.Writer) {
 
 	context := strings.TrimRight(string(stdout), "\n")
 	fmt.Fprintf(w, ansi.Color(fmt.Sprintf(" %s ", context), KubernetesStyle))
+}
+
+func aws(w io.Writer) {
+	if profile := os.Getenv("AWS_PROFILE"); profile != "" {
+		fmt.Fprintf(w, ansi.Color(fmt.Sprintf(" %s ", profile), AWSStyle))
+	}
 }
 
 func terraform(w io.Writer, pwd string) {
